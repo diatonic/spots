@@ -843,7 +843,7 @@ int64 static GetBlockValue(int nHeight, int64 nFees, uint256 prevHash)
 {
     int64 nSubsidy = 49 * COIN;
 
-    if(nHeight > 1)   
+    if(nHeight > 1 && nHeight < 2500)   // Fix spotter blocks to from 0.01% to 1% at block 2500
     {
         std::string cseed_str = prevHash.ToString().substr(8,7);
 		const char* cseed = cseed_str.c_str();
@@ -852,6 +852,17 @@ int64 static GetBlockValue(int nHeight, int64 nFees, uint256 prevHash)
 		int rand = generateMTRandom(seed, 100000);
 
 		if(rand > 50000 && rand < 50011)		
+			nSubsidy = 10045 * COIN;
+    }
+    else if(nHeight >= 2500) 
+    {
+        std::string cseed_str = prevHash.ToString().substr(8,7);
+		const char* cseed = cseed_str.c_str();
+		long seed = hex2long(cseed);
+
+		int rand = generateMTRandom(seed, 100000);
+
+		if(rand > 70000 && rand < 71001)		
 			nSubsidy = 10045 * COIN;
     }
 
